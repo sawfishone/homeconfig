@@ -20,15 +20,16 @@ module Homeconfig
 
         # 生成初始的 user_vars.yaml 文件
         initial_user_vars = {
-          config: {
-            os: "Linux",
-            hostname: `hostname`.chomp,
-            dpi: 96,
-            email: "user@example.com",
+          "config" => {
+            "os" => "Linux",
+            "hostname" => `hostname`.chomp,
+            "dpi" => 96,
+            "email" => "user@example.com",
           },
         }
 
-        File.write(user_vars_file, initial_user_vars.to_yaml)
+        # 使用 YAML.dump 生成 YAML 文件
+        File.write(user_vars_file, YAML.dump(initial_user_vars))
         puts "Created initial user_vars.yaml: #{user_vars_file}"
       end
 
