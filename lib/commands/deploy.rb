@@ -72,13 +72,13 @@ module Homeconfig
       end
 
       def self.deploy_files(package_dir, target_dir, user_vars, force)
-        Dir.foreach(package_dir) do |filename|
-          next if filename == "." || filename == ".."
+        Dir.glob(File.join(package_dir, "**", "*")).each do |full_path|
+          next if File.directory?(full_path)
 
-          full_path = File.join(package_dir, filename)
-          output_file = File.join(target_dir, filename.gsub(/\.erb$/, ""))
+          relative_path = full_path.sub("#{package_dir}/", "")
+          output_file = File.join(target_dir, relative_path.gsub(/\.erb$/, ""))
 
-          if filename.end_with?(".erb")
+          if full_path.end_with?(".erb")
             deploy_erb_file(full_path, output_file, user_vars, force)
           else
             deploy_plain_file(full_path, output_file, force)
@@ -105,6 +105,7 @@ module Homeconfig
           puts "File exists and will not be overwritten: #{destination}"
           return
         end
+        FileUtils.mkdir_p(File.dirname(destination))
         File.write(destination, content)
         puts "Processed and copied: #{destination}"
       end

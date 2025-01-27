@@ -8,6 +8,7 @@ module Homeconfig
       def self.run(_options)
         dotfile_dir = Homeconfig::Dotfile::Path.get_dotfile_dir(nil)
         user_vars_file = File.join(dotfile_dir, "user_vars.yaml")
+        gitignore_file = File.join(dotfile_dir, ".gitignore")
 
         if Dir.exist?(dotfile_dir)
           puts "Directory already exists: #{dotfile_dir}"
@@ -28,9 +29,15 @@ module Homeconfig
           },
         }
 
-        # 使用 YAML.dump 生成 YAML 文件
+        # Write the YAML data to user_vars.yaml
         File.write(user_vars_file, YAML.dump(initial_user_vars))
         puts "Created initial user_vars.yaml: #{user_vars_file}"
+
+        # Create the .gitignore file and add user_vars.yaml to it
+        File.open(gitignore_file, "w") do |file|
+          file.puts "user_vars.yaml"
+        end
+        puts "Created .gitignore and added user_vars.yaml to it: #{gitignore_file}"
       end
 
       def self.help

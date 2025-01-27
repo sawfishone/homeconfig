@@ -1,3 +1,6 @@
 # homeconfig
 
-`homeconfig` 是一个轻量级的用户配置管理工具，用于集中管理和部署用户配置文件（如 `vim`、`emacs` 等）。通过解析模板文件（如 `.erb`）生成最终的配置文件，然后将这些文件部署到目标目录。
+`homeconfig` is a lightweight user configuration management tool designed to centralize and deploy user configuration files (e.g., `vim`, `emacs`, etc.). It supports dynamically generating configuration files from templates (e.g., `.erb`) and deploying them to specified directories.
+
+---
+For Chinese documentation, see [README_CN.md](./README_CN.md).
