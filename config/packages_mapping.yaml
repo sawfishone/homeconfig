@@ -5,3 +5,4 @@ packages:
   emacs: "$HOME/.emacs.d"
   kitty: "$HOME/.config/kitty"
   bspwm: "$HOME/.config/bspwm"
+  fontconfig: "$HOME/.config/fontconfig"

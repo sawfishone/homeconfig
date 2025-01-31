@@ -1,6 +1,7 @@
 require "yaml"
 require "erb"
 require "fileutils"
+require "ostruct"
 
 module Homeconfig
   module Commands
@@ -88,6 +89,7 @@ module Homeconfig
 
       def self.deploy_erb_file(source, destination, user_vars, force)
         template = ERB.new(File.read(source))
+        config = OpenStruct.new(user_vars["config"])
         result = template.result(binding)
         write_file(destination, result, force)
       rescue => e
