@@ -73,12 +73,10 @@ module Homeconfig
       end
 
       def self.deploy_files(package_dir, target_dir, user_vars, force)
-        Dir.glob(File.join(package_dir, "**", "*")).each do |full_path|
-          next if File.directory?(full_path)
-
+        Dir.glob(File.join(package_dir, "**", "*"), File::FNM_DOTMATCH).each do |full_path|
+          next if [".", ".."].include?(File.basename(full_path))
           relative_path = full_path.sub("#{package_dir}/", "")
           output_file = File.join(target_dir, relative_path.gsub(/\.erb$/, ""))
-
           if full_path.end_with?(".erb")
             deploy_erb_file(full_path, output_file, user_vars, force)
           else
@@ -118,7 +116,9 @@ module Homeconfig
 
       def self.available_packages
         dotfile_dir = Homeconfig::Dotfile::Path.get_dotfile_dir(nil)
-        Dir.children(dotfile_dir).select { |dir| File.directory?(File.join(dotfile_dir, dir)) }
+        Dir.children(dotfile_dir).select do |dir|
+          File.directory?(File.join(dotfile_dir, dir)) && !dir.start_with?(".")
+        end
       end
     end
   end
