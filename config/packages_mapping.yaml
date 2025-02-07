@@ -1,7 +1,7 @@
 # config/packages_mapping.yaml
 packages:
   vim: "$HOME/.vim"
-  zsh: "$HOME/.zsh"
+  zsh: "$HOME"
   emacs: "$HOME/.emacs.d"
   kitty: "$HOME/.config/kitty"
   bspwm: "$HOME/.config/bspwm"

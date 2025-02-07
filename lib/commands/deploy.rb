@@ -75,6 +75,7 @@ module Homeconfig
       def self.deploy_files(package_dir, target_dir, user_vars, force)
         Dir.glob(File.join(package_dir, "**", "*"), File::FNM_DOTMATCH).each do |full_path|
           next if [".", ".."].include?(File.basename(full_path))
+          next if File.directory?(full_path)
           relative_path = full_path.sub("#{package_dir}/", "")
           output_file = File.join(target_dir, relative_path.gsub(/\.erb$/, ""))
           if full_path.end_with?(".erb")
@@ -89,24 +90,25 @@ module Homeconfig
         template = ERB.new(File.read(source))
         config = OpenStruct.new(user_vars["config"])
         result = template.result(binding)
-        write_file(destination, result, force)
+        write_file(destination, result, File.stat(source).mode, force)
       rescue => e
         puts "Error processing ERB file #{source}: #{e.message}"
       end
 
       def self.deploy_plain_file(source, destination, force)
-        write_file(destination, File.read(source), force)
+        write_file(destination, File.read(source), File.stat(source).mode, force)
       rescue => e
         puts "Error copying file #{source}: #{e.message}"
       end
 
-      def self.write_file(destination, content, force)
+      def self.write_file(destination, content, mode, force)
         if File.exist?(destination) && !force
           puts "File exists and will not be overwritten: #{destination}"
           return
         end
         FileUtils.mkdir_p(File.dirname(destination))
-        File.write(destination, content)
+        File.open(destination, "w") { |f| f.write(content) }
+        FileUtils.chmod(mode, destination)
         puts "Processed and copied: #{destination}"
       end
 
