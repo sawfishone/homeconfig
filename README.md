@@ -52,7 +52,7 @@ config:
   dpi: 222
 ```
 
-Template Example (.zshrc.erb)
+### Template Example (.zshrc.erb)
 
 Here is a .zshrc.erb template example that generates different configuration content based on the value of config.os:
 
