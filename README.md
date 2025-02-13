@@ -35,10 +35,11 @@ HomeConfig provides the `hc` command with the following subcommands:
 ### Subcommands
 
 - **init**: Initializes the `~/.mydotfiles` directory and creates the initial `user_vars.yaml` configuration file.
-- **deploy**: Parses and deploys template files to the target location.
+- **deploy**: Parses and deploys template files to the target location. Only files with the .erb extension will be parsed as templates, while others will be copied directly.
 
     ```bash
-    hc deploy zsh ~/   # Deploys ~/.mydotfiles/zsh/.zshrc.erb to ~/.zshrc
+    hc deploy zsh ~/       # Deploys ~/.mydotfiles/zsh/.zshrc.erb to ~/.zshrc
+    hc deploy vim ~/.vim   # Deploys files from ~/.mydotfiles/vim/ directory and its subdirectories to ~/.vim/
     ```
 
 ### Template Variables File (`user_vars.yaml`)
@@ -48,7 +49,6 @@ Variables such as operating system, DPI, etc., are set in the `~/.mydotfiles/use
 ```yaml
 config:
   os: macOS
-  hostname: ripple
   dpi: 222
 ```
 

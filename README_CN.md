@@ -33,11 +33,12 @@ HomeConfig 提供了 `hc` 命令，并支持子命令。
 
 ### 子命令
 
-- init：初始化 `~/.mydotfiles` 目录，并创建初始的 `user_vars.yaml` 配置文件。
-- deploy：解析并部署模板文件到目标位置。
+- **init**：初始化 `~/.mydotfiles` 目录，并创建初始的 `user_vars.yaml` 配置文件。
+- **deploy**: 解析并部署模板文件到目标位置。只有扩展名为 .erb 的文件会进行模板解析，其他文件将直接复制。
 
     ```bash
-    hc deploy zsh ~/   # 将 ~/.mydotfiles/zsh/.zshrc.erb 部署为 ~/.zshrc
+    hc deploy zsh ~/       # 将 ~/.mydotfiles/zsh/.zshrc.erb 部署为 ~/.zshrc
+    hc deploy vim ~/.vim   # 将 ~/.mydotfiles/vim/目录及子目录下的文件部署到 ~/.vim/
     ```
 
 ### 模板变量文件（user_vars.yaml）
@@ -47,7 +48,6 @@ HomeConfig 提供了 `hc` 命令，并支持子命令。
 ```yaml
 config:
   os: macOS
-  hostname: ripple
   dpi: 222
 ```
 
