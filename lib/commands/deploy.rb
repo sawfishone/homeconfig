@@ -54,11 +54,22 @@ module Homeconfig
 
       def self.mappings
         @mappings ||= begin
+            package_mapping = {}
+
+            # First try to load from the default location
             if File.exist?(PACKAGE_MAPPING_FILE)
-              YAML.load_file(PACKAGE_MAPPING_FILE)["packages"] || {}
-            else
-              {}
+              default_mapping = YAML.load_file(PACKAGE_MAPPING_FILE)["packages"]
+              package_mapping.merge!(default_mapping) if default_mapping
             end
+
+            # Then try to load from ~/.mydotfiles
+            mydotfiles_mapping_file = File.join(ENV["MYDOTFILES_DIR"] || File.expand_path("~/.mydotfiles"), "packages_mapping.yaml")
+            if File.exist?(mydotfiles_mapping_file)
+              user_mapping = YAML.load_file(mydotfiles_mapping_file)["packages"]
+              package_mapping.merge!(user_mapping) if user_mapping
+            end
+
+            package_mapping
           end
       end
 
@@ -87,7 +98,7 @@ module Homeconfig
       end
 
       def self.deploy_erb_file(source, destination, user_vars, force)
-        template = ERB.new(File.read(source),trim_mode: '-')
+        template = ERB.new(File.read(source), trim_mode: "-")
         config = OpenStruct.new(user_vars["config"])
         result = template.result(binding)
         write_file(destination, result, File.stat(source).mode, force)
